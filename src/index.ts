@@ -2,8 +2,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-import auth from './routes/auth';
-import { getPrismaClient, disconnectPrisma } from './utils/prisma';
+import auth from "./routes/auth";
+import { getPrismaClient, disconnectPrisma } from "./utils/prisma";
 
 type Bindings = {
   DB: D1Database;
@@ -30,11 +30,11 @@ app.use("*", async (c, next) => {
 });
 
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.json({ message: "Hello Yash!" });
 });
 
 // Routes
-app.route('/api/v1/auth', auth);
+app.route("/api/v1/auth", auth);
 
 // Error handling
 app.onError((err, c) => {
@@ -51,8 +51,8 @@ app.onError((err, c) => {
 });
 
 // Clean up Prisma on worker termination
-addEventListener('unhandledrejection', async (event) => {
-  console.error('Unhandled rejection:', event.reason);
+addEventListener("unhandledrejection", async (event) => {
+  console.error("Unhandled rejection:", event.reason);
   await disconnectPrisma();
 });
 
